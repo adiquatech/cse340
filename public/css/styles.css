@@ -1,6 +1,277 @@
-/******* Change Box Model ***************/
-*,
-*:before,
-*:after {
+/* ************************** */
+/* Base styles for all screens (Mobile First) */
+/* ************************** */
+
+/* Global styles */
+:root {
+  --primary-color: #4c96d7;       /* Blue */
+  --secondary-color: #2d5986;     /* Darker blue */
+  --accent-color: #ffb01f;        /* Gold/yellow for contrast */
+  --light-color: #f5f5f5;         /* Off-white for backgrounds */
+  --dark-color: #333;             /* Dark gray for text */
+  --border-color: #ddd;           /* Light gray for borders */
+}
+
+html {
   box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: var(--dark-color);
+  background-color: var(--light-color);
+  line-height: 1.6;
+}
+
+#wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+  color: var(--secondary-color);
+}
+
+/* Header Styles */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: white;
+}
+
+.siteName a {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.tools a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.tools a:hover {
+  text-decoration: underline;
+}
+
+/* Navigation Styles */
+nav {
+  background-color: var(--secondary-color);
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+nav li {
+  margin: 0;
+}
+
+nav a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 0.8rem 1rem;
+  transition: background-color 0.3s;
+}
+
+nav a:hover {
+  background-color: var(--primary-color);
+}
+
+/* Main content area */
+main {
+  padding: 1rem;
+}
+
+/* Hero section styles */
+.hero {
+  position: relative;
+  margin-bottom: 1.5rem;
+  background-color: white;
+  border: 1px solid var(--border-color);
+}
+
+.hero img {
+  width: 100%;
+  display: block;
+}
+
+.hero-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.7);
+  width: 50%;
+}
+
+.hero-content h2 {
+  margin-top: 0;
+  color: var(--primary-color);
+}
+
+.hero-content ul {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.action-btn {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  border-radius: 3px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.action-btn:hover {
+  background-color: var(--secondary-color);
+}
+
+/* Home grid layout for mobile */
+.home-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+/* Upgrades section */
+.upgrades {
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  background-color: white;
+}
+
+.upgrades-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.upgrade-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.upgrade-image {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: 1px solid var(--border-color);
+  margin-bottom: 0.5rem;
+}
+
+.upgrade-image img {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.upgrade-item a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.upgrade-item a:hover {
+  text-decoration: underline;
+}
+
+/* Reviews section */
+.reviews {
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  background-color: white;
+}
+
+.reviews ul {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.reviews li {
+  margin-bottom: 0.5rem;
+}
+
+/* Footer Styles */
+footer {
+  background-color: var(--secondary-color);
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+}
+
+footer p {
+  margin: 0;
+}
+
+/* ************************** */
+/* Media query for larger screens */
+/* ************************** */
+@media screen and (min-width: 768px) {
+  /* Main content area */
+  main {
+    padding: 1.5rem;
+  }
+  
+  /* Navigation adjustments for desktop */
+  nav ul {
+    justify-content: space-around;
+  }
+  
+  nav a {
+    padding: 0.8rem 1.5rem;
+  }
+  
+  /* Hero section adjustments */
+  .hero-content {
+    width: 15%; /* Covering roughly 1/7 of the hero image from the left */
+  }
+  
+  /* Home grid layout for larger screens */
+  .home-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  
+  /* Make both sections the same height */
+  .upgrades, .reviews {
+    height: 100%;
+  }
+  
+  /* Upgrades section adjustments */
+  .upgrades-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Larger images for upgrades */
+  .upgrade-image {
+    width: 100px;
+    height: 100px;
+  }
 }
