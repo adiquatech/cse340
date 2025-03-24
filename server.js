@@ -17,12 +17,17 @@ const utilities = require("./utilities/")
  * Base COntroller
  *************************/
 const baseController = require("./controllers/baseController")
+console.log("Starting server...");
 
 /* ***********************
 View Engine and Templates */
 app.set("view engine", "ejs")
 app.use(expressLayouts)
 app.set("layout", "./layouts/layout") // not at views root
+
+app.get("/test", (req, res) => {
+  res.send("Render test works!")
+})
 
 /* ***********************
  * Routes
@@ -60,6 +65,7 @@ app.use(async (err, req, res, next) => {
     })
   }
 })
+
 /* ***********************
  * Local Server Information
  * Values from .env (environment) file
@@ -67,12 +73,23 @@ app.use(async (err, req, res, next) => {
 const port = process.env.PORT || 10000
 const host = process.env.HOST || "0.0.0.0"
 
+console.log("Environment vars:", {
+  PORT: process.env.PORT,
+  HOST: process.env.HOST,
+  NODE_ENV: process.env.NODE_ENV
+});
+
 /* ***********************
  * Log statement to confirm server operation
  *************************/
-app.listen(port, host, () => {
-  console.log(`app listening on ${host}:${port}`)
-
-})
+try {
+  app.listen(port, host, () => {
+    console.log(`app listening on ${host}:${port}`)
+    console.log("Server started successfully");
+  })
+} catch (error) {
+  console.error(`Server startup failed: ${error.message}`);
+  process.exit(1);
+}
 
 
