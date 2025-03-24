@@ -207,10 +207,89 @@ footer {
 footer p {
   margin: 0;
 }
+/* Footer Error Trigger Button */
+footer a.error-trigger {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background-color: #d9534f; /* Bootstrap-style red */
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+footer a.error-trigger:hover {
+  background-color: #c9302c; /* Darker red on hover */
+  text-decoration: none;
+}
 
 
 /* ========================================================================================== */
-/*                                  Media query for larger screens                            */
+/*                               INVENTORY DETAIL PAGE STYLING                                */
+/* ========================================================================================== */
+/*Details*/
+.vehicle-detail {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: white;
+  border: 1px solid var(--border-color);
+}
+.vehicle-detail img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border-color);
+}
+.vehicle-info {
+  display: flex;
+  flex-direction: column;
+}
+.vehicle-info h2 {
+  color: var(--primary-color);
+  margin-top: 0;
+}
+.vehicle-info p {
+  margin: 10px 0;
+}
+.vehicle-info strong {
+  color: var(--secondary-color);
+}
+
+/*Grid*/
+.vehicle-grid {
+  padding: 1rem;
+}
+.vehicle-card {
+  background-color: hsl(0, 0%, 95%);
+  border: 1px solid var(--secondary-color);
+  padding: 1rem;
+  text-align: center;
+  border-radius: 8px;
+}
+.vehicle-card img {
+  width: 100%;
+  height: auto;
+  /* border: 1px solid var(--dark-color); */
+  border-radius: 8px;
+}
+.card-info h2 {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+.card-info h2 a {
+  color: var(--dark-color);
+  text-decoration: none;
+}
+.card-info h2 a:hover {
+  text-decoration: underline;
+}
+.card-info .price {
+  font-size: 1.1rem;
+  color: var(--dark-color);
+  margin: 5px 0;
+}
+
+/* ========================================================================================== */
+/*                                  MEDIA QUERIES FOR ALL PAGES                               */
 /* ========================================================================================== */
 @media screen and (min-width: 768px) {
   main {
@@ -238,5 +317,36 @@ footer p {
   .upgrade-image {
     width: 100px;
     height: 100px;
+  }
+  .vehicle-detail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 1.5rem;
+  }
+  .vehicle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .vehicle-detail {
+    display: block;
+  }
+  .vehicle-detail img {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .vehicle-info {
+    display: block;
+  }
+  .vehicle-grid {
+    display: block;
+  }
+  .vehicle-card {
+    margin-bottom: 20px;
   }
 }
