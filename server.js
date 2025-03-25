@@ -13,6 +13,11 @@ const static = require("./routes/static")
 const inventoryRoute = require("./routes/inventoryRoute")
 const utilities = require("./utilities/")
 
+// Crash detection
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err.message);
+});
+
 /* ***********************
  * Base COntroller
  *************************/
@@ -87,14 +92,9 @@ console.log("Environment vars:", {
 /* ***********************
  * Log statement to confirm server operation
  *************************/
-try {
-  app.listen(port, host, () => {
-    console.log(`app listening on ${host}:${port}`)
-    console.log("Server started successfully");
-  })
-} catch (error) {
-  console.error(`Server startup failed: ${error.message}`);
-  process.exit(1);
-}
+app.listen(port, host, () => {
+  console.log(`app listening on ${host}:${port}`);
+  console.log("Server started successfully");
+});
 
 
