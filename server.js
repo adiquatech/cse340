@@ -12,27 +12,27 @@ const app = express()
 const static = require("./routes/static")
 const inventoryRoute = require("./routes/inventoryRoute")
 const utilities = require("./utilities/")
+const baseController = require("./controllers/baseController")
+
 
 // Crash detection
+console.log("Starting server...");
 process.on("uncaughtException", (err) => {
   console.error("Uncaught Exception:", err.message);
 });
 
-/* ***********************
- * Base COntroller
- *************************/
-const baseController = require("./controllers/baseController")
-console.log("Starting server...");
 
 /* ***********************
-View Engine and Templates */
+View Engine and Templates 
+************************/
 app.set("view engine", "ejs")
 app.use(expressLayouts)
-app.set("layout", "./layouts/layout") // not at views root
+app.set("layout", "./layouts/layout")
 
 app.get("/test", (req, res) => {
+  console.log("Test route hit");
   res.send("Render test works!")
-})
+});
 
 app.use((req, res, next) => {
   console.log(`Request received: ${req.method} ${req.url}`);
