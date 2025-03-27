@@ -1,14 +1,17 @@
 const utilities = require("../utilities/")
 const baseController = {}
 
-baseController.buildHome = async function(req, res, next) {
+baseController.buildHome = async function(req, res) {
+  console.log("Entering buildHome")
+  let nav = []
   try {
-    const nav = await utilities.getNav()
-    res.render("index", {title: "Home", nav}, { layout: false })
+    nav = await utilities.getNav()
+    console.log("Nav fetched:", nav.length)
   } catch (error) {
-    console.error("BuildHome error:", error.message)
-    next({ status: 500, message: `Home page error: ${error.message}` })
+    console.error("Nav error:", error.message)
   }
+  console.log("Rendering index")
+  res.send("Home page with nav: " + JSON.stringify(nav))
 }
 
 module.exports = baseController
