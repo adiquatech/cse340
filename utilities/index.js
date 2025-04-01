@@ -55,6 +55,29 @@ Util.buildVehicleHTML = async function(vehicle) {
   html += '</div>'
   html += '</div>'
   return html
-}
+};
+
+
+/* ***************************
+ *  Middleware to handle errors in route handlers
+ * ************************** */
+Util.handleErrors = (fn) => async (req, res, next) => {
+  try {
+    await fn(req, res, next);
+  } catch (err) {
+    console.error(err.stack);
+    const nav = await Util.getNav(); // Fetch navigation dynamically
+    req.flash("messages", err.message || "An error occurred. Please try again.");
+    res.status(500).render(req.path.includes("registeration") ? "account/registeration" : "account/login", {
+      title: req.path.includes("registeration") ? "Register" : "Login",
+      nav,
+      errors: null,
+      messages: req.flash("messages"),
+      account_firstname: req.body.account_firstname || "",
+      account_lastname: req.body.account_lastname || "",
+      account_email: req.body.account_email || "",
+    });
+  }
+};
 
 module.exports = Util
