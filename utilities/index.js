@@ -55,6 +55,21 @@ Util.buildVehicleHTML = async function(vehicle) {
   html += '</div>'
   html += '</div>'
   return html
-}
+};
+
+
+/* ***************************
+ *  Middleware to handle errors in route handlers
+ * ************************** */
+Util.handleErrors = (fn) => (req, res, next) => {
+  Promise.resolve(fn(req, res, next)).catch((err) => {
+    console.error(err.stack);
+    req.flash("messages", "An error occurred. Please try again.");
+    res.status(500).render("account/register", {
+      title: "Register",
+      nav: null,
+    });
+  });
+};
 
 module.exports = Util
