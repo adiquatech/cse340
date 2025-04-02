@@ -13,6 +13,7 @@ async function registerAccount(account_firstname, account_lastname, account_emai
     }
   }
 
+<<<<<<< HEAD
 
 /* **********************
  *   Check for existing email
@@ -28,3 +29,6 @@ async function checkExistingEmail(account_email){
 }
 
 module.exports = {registerAccount, checkExistingEmail}
+=======
+module.exports = {registerAccount}
+>>>>>>> 43a7ba244e6afc2dea1d7bbfb73f8aaaf93209ba
