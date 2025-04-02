@@ -1,12 +1,7 @@
 const utilities = require(".")
-<<<<<<< HEAD
 const accountModel = require("../models/account-model")
 const { body, validationResult } = require("express-validator")
 const validate = {}
-=======
-  const { body, validationResult } = require("express-validator")
-  const validate = {}
->>>>>>> 43a7ba244e6afc2dea1d7bbfb73f8aaaf93209ba
 
 
   /*  **********************************
@@ -32,7 +27,6 @@ const validate = {}
   
       // valid email is required and cannot already exist in the DB
       body("account_email")
-<<<<<<< HEAD
         .trim()
         .escape()
         .notEmpty()
@@ -49,15 +43,7 @@ const validate = {}
             throw new Error("Error checking email: " + error.message);
           }
         }),
-=======
-      .trim()
-      .escape()
-      .notEmpty()
-      .isEmail()
-      .normalizeEmail() // refer to validator.js docs
-      .withMessage("A valid email is required."),
->>>>>>> 43a7ba244e6afc2dea1d7bbfb73f8aaaf93209ba
-  
+
       // password is required and must be strong password
       body("account_password")
         .trim()
@@ -83,13 +69,9 @@ validate.checkRegData = async (req, res, next) => {
     errors = validationResult(req)
     if (!errors.isEmpty()) {
       let nav = await utilities.getNav()
-<<<<<<< HEAD
       res.render("account/registeration", {
         errors: errors.array(),
-=======
-      res.render("account/register", {
-        errors,
->>>>>>> 43a7ba244e6afc2dea1d7bbfb73f8aaaf93209ba
+
         title: "Registration",
         nav,
         messages: req.flash("messages"),
@@ -102,7 +84,6 @@ validate.checkRegData = async (req, res, next) => {
     next()
   }
   
-<<<<<<< HEAD
 
   /*  **********************************
 *  Login Data Validation Rules
@@ -142,6 +123,5 @@ validate.checkLoginData = async (req, res, next) => {
     }
     next();
 }
-=======
->>>>>>> 43a7ba244e6afc2dea1d7bbfb73f8aaaf93209ba
+
   module.exports = validate

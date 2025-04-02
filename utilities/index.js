@@ -61,7 +61,6 @@ Util.buildVehicleHTML = async function(vehicle) {
 /* ***************************
  *  Middleware to handle errors in route handlers
  * ************************** */
-<<<<<<< HEAD
 Util.handleErrors = (fn) => async (req, res, next) => {
   try {
     await fn(req, res, next);
@@ -79,17 +78,6 @@ Util.handleErrors = (fn) => async (req, res, next) => {
       account_email: req.body.account_email || "",
     });
   }
-=======
-Util.handleErrors = (fn) => (req, res, next) => {
-  Promise.resolve(fn(req, res, next)).catch((err) => {
-    console.error(err.stack);
-    req.flash("messages", "An error occurred. Please try again.");
-    res.status(500).render("account/register", {
-      title: "Register",
-      nav: null,
-    });
-  });
->>>>>>> 43a7ba244e6afc2dea1d7bbfb73f8aaaf93209ba
 };
 
 module.exports = Util
