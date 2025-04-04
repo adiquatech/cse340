@@ -91,13 +91,13 @@ validate.inventoryRules = () => {
       .notEmpty()
       .withMessage("Image path is required.")
       .matches(/^\/images\/vehicles\/.*\.png$/)
-      .withMessage("Image path must be a valid path to a .jpg file in /images/vehicles/."),
+      .withMessage("Image path must be a valid path to a .png file in /images/vehicles/."),
     body("inv_thumbnail")
       .trim()
       .notEmpty()
       .withMessage("Thumbnail path is required.")
       .matches(/^\/images\/vehicles\/.*\.png$/)
-      .withMessage("Thumbnail path must be a valid path to a .jpg file in /images/vehicles/."),
+      .withMessage("Thumbnail path must be a valid path to a .png file in /images/vehicles/."),
     body("inv_price")
       .trim()
       .notEmpty()
