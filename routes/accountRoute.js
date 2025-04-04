@@ -10,16 +10,8 @@ const regValidate = require('../utilities/account-validation')
 // GET route for /login
 router.get("/login", accountController.buildLogin)
 
-
-
 // GET route for /login
 router.get("/registeration", accountController.buildRegister)
-
-// // Error handling middleware
-// router.use(async (err, req, res, next) => {
-//   console.error(`Registeration route error: ${err.message}`)
-//   next(err)
-// })
 
 //
 router.post(
@@ -27,7 +19,6 @@ router.post(
   regValidate.registationRules(),
   regValidate.checkRegData,
   utilities.handleErrors(accountController.registerAccount))
-
 
 // Process the login attempt
 router.post(
