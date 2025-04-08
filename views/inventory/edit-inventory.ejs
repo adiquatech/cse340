@@ -1,15 +1,15 @@
-<h1>Add New Inventory</h1>
+<h1>Edit Inventory Item</h1>
 <div class="add-inventory">
-<% if (messages && messages.length > 0) { %>
-    <% messages.forEach(message => { %>
-        <div class="messages <%= message.type %>">
-        <p><%= message.text %></p>
-        </div>
-    <% }) %>
-    <% } %>
+    <% if (messages && messages.length > 0) { %>
+        <% messages.forEach(message => { %>
+          <div class="messages <%= message.type %>">
+            <p><%= message.text %></p>
+          </div>
+        <% }) %>
+      <% } %>
 
 <!-- Form -->
-<form id="inventoryForm" action="/inv/add-inventory" method="POST" novalidate>
+<form id="updateForm" action="/inv/update" method="post" novalidate>
     <!-- Classification Dropdown -->
     <div class="form-group">
     <label for="classificationList">Classification</label>
@@ -148,8 +148,8 @@
         title="Color must contain only letters and spaces."
     >
     </div>
-
-    <button type="submit" class="btn btn-primary">Add Inventory</button>
+    <input type="hidden" name="inv_id" <% if(locals.inv_id) { %> value="<%= locals.inv_id %>" <% } %>>
+    <button type="submit" class="btn btn-primary" disabled>Update Vehicles</button>
 </form>
 </div>
 

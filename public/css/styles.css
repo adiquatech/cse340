@@ -44,7 +44,13 @@ header {
   padding: 1rem;
   background-color: white;
 }
-.siteName a {
+header a { 
+  display: flex; 
+  align-items: center;
+  text-decoration: none; 
+  color: inherit;
+}
+.siteName {
   font-size: 1.8rem;
   font-weight: bold;
   color: var(--primary-color);
@@ -351,7 +357,7 @@ input[type="password"]::placeholder {
   transition: background-color 0.3s ease;
 }
 .login-button:hover {
-  background-color: var(--light-color);
+  background-color: var(--accent-color);
 }
 .register-link {
   margin-top: 1.5rem;
@@ -444,19 +450,22 @@ input[type="password"]::placeholder {
   background-color: var(--secondary-color);
 }
 
-/* /* Flash Messages Styling */
+
+/* Messages Styling */
 .messages {
-  background-color: #f8d7da;
-  color: #721c24;
   padding: 1rem;
   margin-bottom: 1rem;
-  border: 1px solid #f5c6cb;
   border-radius: 5px;
   font-size: 0.9rem;
 }
-
-/* Ensure visibility on login page (darker background) */
-.login-container .messages {
+/* Negative (Error) Messages */
+.messages.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+/* Positive (Success) Messages */
+.messages.success {
   background-color: #d4edda;
   color: #155724;
   border: 1px solid #c3e6cb;
@@ -494,6 +503,45 @@ input[type="password"]::placeholder {
   background-color: var(--primary-color);
 }
 
+
+/*manage inventory*/
+.management-links h2 {
+  margin-top: 2rem;
+  font-size: 2rem;
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--secondary-color);
+  padding-bottom: 0.5rem;
+}
+.management-links p {
+  margin: 1rem 0;
+  font-size: 1.5rem;
+  color: #555;
+}
+#classificationList {
+  font-size: 1.5rem;
+  padding: 0.5rem;
+}
+#inventoryDisplay {
+  width: 100%;
+  margin-top: 1.5rem;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+#inventoryDisplay th,
+#inventoryDisplay td {
+  padding: 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+#inventoryDisplay th {
+  background-color: var(--secondary-color);
+  color: white;
+  font-weight: bold;
+}
+#inventoryDisplay tr:hover {
+  background-color: #f5f5f5;
+}
 
 /* ========================================================================================== */
 /*                               ADD CLASSIFICATION PAGE                       */
@@ -558,28 +606,6 @@ input[type="password"]::placeholder {
 .add-container .btn.btn-primary:hover {
   background-color: var(--primary-color);
 }
-/* Flash Messages Styling for Add Classification Page
-.add-container .messages {
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 5px;
-  font-size: 0.9rem;
-}
-
-.add-container .messages .success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-}
-.add-container .messages .error {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-} */
 
 
 /* ========================================================================================== */
@@ -657,30 +683,7 @@ input[type="password"]::placeholder {
   transition: background-color 0.3s ease;
 }
 .add-inventory .btn.btn-primary:hover {
-  background-color: hsl(0, 0%, 80%);
-}
-/* Flash Messages Styling for Add Inventory Page */
-.add-inventory .messages {
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 5px;
-  font-size: 0.9rem;
-}
-
-.add-inventory .messages .success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-}
-
-.add-inventory .messages .error {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
+  background-color: hsl(39, 100%, 60%);
 }
 
 
@@ -688,15 +691,6 @@ input[type="password"]::placeholder {
 /*                               NEW PAGE STYLING                                */
 /* ========================================================================================== */
 
-
-/* ========================================================================================== */
-/*                               NEW PAGE STYLING                                */
-/* ========================================================================================== */
-
-
-/* ========================================================================================== */
-/*                               NEW PAGE STYLING                                */
-/* ========================================================================================== */
 
 
 /* ========================================================================================== */

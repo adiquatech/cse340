@@ -8,12 +8,12 @@
         </div>
     <% } %>
     <% if (messages && messages.length > 0) { %>
-        <div class="messages">
-            <% messages.forEach(message => { %>
-                <p><%= message %></p>
-            <% }) %>
-        </div>
-    <% } %>
+        <% messages.forEach(message => { %>
+          <div class="messages <%= message.type %>">
+            <p><%= message.text %></p>
+          </div>
+        <% }) %>
+      <% } %>
     
     <form action="/account/registeration" method="post" class="register-form">
         <div class="form-group">

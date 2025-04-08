@@ -9,7 +9,7 @@ baseController.buildHome = async function(req, res, next) {
   } catch (error) {
     console.error("Nav error:", error.message)
   }
-  req.flash("messages", "This is a flash message.")
+  req.flash("messages", [{ text: "This is a flash message.", type: "success" }]);
   res.render("index", {title: "Home", nav}) // Remove { layout: false }
 }
 

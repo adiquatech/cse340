@@ -1,12 +1,12 @@
 <h1><%= title %></h1>
 <div class="login-container">
-    <% if (Array.isArray(messages) && messages.length > 0) { %>
-        <div class="messages">
-            <% messages.forEach(message => { %>
-                <p><%= message %></p>
-            <% }) %>
-        </div>
-    <% } %>
+    <% if (messages && messages.length > 0) { %>
+        <% messages.forEach(message => { %>
+          <div class="messages <%= message.type %>">
+            <p><%= message.text %></p>
+          </div>
+        <% }) %>
+      <% } %>
 
     <form action="/account/login" method="post" class="login-form">
         <div class="form-group">

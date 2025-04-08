@@ -2,16 +2,26 @@
 <h1>Inventory Management</h1>
 
 <% if (messages && messages.length > 0) { %>
-    <div class="messages">
     <% messages.forEach(message => { %>
-        <p><%= message %></p>
+      <div class="messages 
+      <%= message.type %>">
+        <p><%= message.text %></p>
+      </div>
     <% }) %>
-    </div>
-<% } %>
+  <% } %>
 
 <nav class="management-links">
     <ul>
     <li><a href="/inv/add-classification">Add New Classification</a></li>
     <li><a href="/inv/add-inventory">Add New Inventory</a></li>
     </ul>
+
+    <h2>Manage Inventory</h2>
+    <p>Select a classification from the list to see the items belonging to the classification.</p>
+    <%- classificationList %>
+    <table id="inventoryDisplay"></table>
+    <noscript>JavaScript must be enabled to use this page.</noscript>
+
 </nav>
+
+<script src="../../js/inventory.js"></script>

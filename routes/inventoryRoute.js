@@ -20,6 +20,17 @@ router.get("/", utilities.handleErrors(invController.buildManagement));
 // Route to render the add-classification view
 router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification));
 
+// Route to render the add-inventory view
+router.get("/add-inventory", utilities.handleErrors(invController.buildAddInventory));
+
+
+//Route to get inventory json
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON));
+
+//Edit inventory view
+router.get("/edit/:inv_id", utilities.handleErrors(invController.buildEditInventoryView));
+
+
 // Route to handle add-classification form submission
 router.post(
     "/add-classification",
@@ -29,9 +40,6 @@ router.post(
   );
 
 
-// Route to render the add-inventory view
-router.get("/add-inventory", utilities.handleErrors(invController.buildAddInventory));
-
 // Route to handle add-inventory form submission
 router.post(
   "/add-inventory",
@@ -39,5 +47,19 @@ router.post(
   invValidate.checkInventoryData,
   utilities.handleErrors(invController.addInventory)
 );
+
+
+//Route to handle inventory update
+router.post(
+  "/update/", 
+  utilities.handleErrors(invController.updateInventory));
+
+//Route to include the newInventoryRules and checkUpdateData middleware:
+router.post(
+  "/update/", 
+  invValidate.inventoryRules(), 
+  invValidate.checkUpdateData, 
+  utilities.handleErrors(invController.updateInventory));
+
 
 module.exports = router;

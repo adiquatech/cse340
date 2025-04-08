@@ -18,6 +18,7 @@ const baseController = require("./controllers/baseController");
 const session = require("express-session");
 const pool = require('./database/');
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser")
 const flash = require("connect-flash"); // Added flash import
 
 /* ***********************
@@ -46,6 +47,14 @@ app.use((req, res, next) => {
 //bodyparser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//cookie-parser
+app.use(cookieParser())
+
+//check JWT token
+app.use(utilities.checkJWTToken)
+
+
 
 /* ***********************
 View Engine and Templates 
