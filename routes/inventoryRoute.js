@@ -52,11 +52,6 @@ router.post(
 //Route to handle inventory update
 router.post(
   "/update/", 
-  utilities.handleErrors(invController.updateInventory));
-
-//Route to include the newInventoryRules and checkUpdateData middleware:
-router.post(
-  "/update/", 
   invValidate.inventoryRules(), 
   invValidate.checkUpdateData, 
   utilities.handleErrors(invController.updateInventory));
