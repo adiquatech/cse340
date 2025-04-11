@@ -1,0 +1,46 @@
+<main>
+  <div class="update-container">
+    <h1><%= title %></h1>
+    <% if (locals.errors && Array.isArray(locals.errors) && locals.errors.length > 0) { %>
+      <div class="messages error">
+        <% locals.errors.forEach(error => { %>
+          <p><%= error.msg %></p>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <!-- Account Update Form -->
+    <h2>Account Update</h2>
+    <form action="/account/update-info" method="post" id="accountUpdateForm">
+      <div class="form-group">
+        <label for="account_firstname">First Name:</label>
+        <input type="text" name="account_firstname" id="account_firstname" value="<%= account_firstname || '' %>" required>
+      </div>
+      <div class="form-group">
+        <label for="account_lastname">Last Name:</label>
+        <input type="text" name="account_lastname" id="account_lastname" value="<%= account_lastname || '' %>" required>
+      </div>
+      <div class="form-group">
+        <label for="account_email">Email:</label>
+        <input type="email" name="account_email" id="account_email" value="<%= account_email || '' %>" required>
+      </div>
+      <input type="hidden" name="account_id" value="<%= account_id %>">
+      <input type="submit" value="Update Account" class="update-button">
+    </form>
+
+    <!-- Change Password Form -->
+    <h2>Change Password</h2>
+    <form action="/account/update-password" method="post" id="changePasswordForm">
+      <div class="form-group">
+        <label for="account_password">New Password:</label>
+        <input type="password" name="account_password" id="account_password" required>
+        <p class="password-requirements">
+          Password must be at least 12 characters long, include at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.
+        </p>
+        <button type="button" class="toggle-password">Show Password</button>
+      </div>
+      <input type="hidden" name="account_id" value="<%= account_id %>">
+      <input type="submit" value="Change Password" class="update-button">
+    </form>
+  </div>
+</main>

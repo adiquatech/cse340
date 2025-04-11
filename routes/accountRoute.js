@@ -4,8 +4,9 @@
 const express = require("express")
 const router = new express.Router()
 const utilities = require("../utilities/")
-const accountController = require("../controllers/accountController")
 const Validate = require('../utilities/account-validation')
+const accountController = require("../controllers/accountController")
+
 
 
 // GET route for /login
@@ -32,6 +33,39 @@ router.get(
   "/",
   utilities.checkLogin, // Middleware to ensure the user is logged in
   utilities.handleErrors(accountController.buildAccountManagement));
+
+// Route to render the account update view
+router.get(
+  "/update/:account_id",
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildAccountUpdateView));
+
+// Route to process account information update
+router.post(
+  "/update-info",
+  utilities.checkLogin,
+  Validate.accountUpdateRules(),
+  Validate.checkAccountUpdateData,
+  utilities.handleErrors(accountController.updateAccountInfo)
+);
+
+// Route to process password update
+router.post(
+  "/update-password",
+  utilities.checkLogin,
+  Validate.passwordUpdateRules(),
+  Validate.checkPasswordUpdateData,
+  utilities.handleErrors(accountController.updatePassword)
+);
+
+// Route to handle logout
+router.get(
+  "/logout", 
+  utilities.handleErrors(accountController.logout)
+);
+
+
+
 
 // Error handling middleware
 router.use(async (err, req, res, next) => {

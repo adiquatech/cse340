@@ -1,0 +1,31 @@
+<title><%= title %></title>
+<div class="delete-container">
+    <h1>Delete <%= inv_make %> <%= inv_model %></h1>
+    <p>Confirm Deletion - The delete is permanent.</p>
+
+    <% if (messages && messages.length > 0) { %>
+      <% messages.forEach(message => { %>
+        <div class="messages <%= message.type %>">
+          <p><%= message.text %></p>
+        </div>
+      <% }) %>
+    <% } %>
+    <% if (errors && errors.length > 0) { %>
+      <div class="messages error">
+        <% errors.forEach(error => { %>
+          <p><%= error.msg %></p>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <form action="/inv/delete/" method="post">
+      <label><strong>Make:</strong> <input type="text" name="inv_make" value="<%= inv_make %>" readonly></label>
+      <label><strong>Model:</strong> <input type="text" name="inv_model" value="<%= inv_model %>" readonly></label>
+      <label><strong>Year:</strong> <input type="text" name="inv_year" value="<%= inv_year %>" readonly></label>
+      <label><strong>Price:</strong> <input type="text" name="inv_price" value="<%= inv_price %>" readonly></label>
+
+      <input type="hidden" name="inv_id" value="<%= inv_id %>">
+      <input type="submit" value="Delete">
+    </form>
+</div>
+

@@ -94,7 +94,7 @@ invCont.addClassification = async function (req, res, next) {
     nav = await utilities.getNav();
   } catch (error) {
     console.error("Error fetching nav in addClassification:", error);
-    nav = "<ul><li><a href='/'>Home</a></li></ul>"; // Fallback nav
+    nav = "<ul><li><a href='/'>Home</a></li></ul>";
   }
 
   const { classification_name } = req.body;
@@ -103,13 +103,12 @@ invCont.addClassification = async function (req, res, next) {
     const result = await invModel.addClassification(classification_name);
     if (result) {
       // Update navigation
-      nav = await utilities.getNav(); // Re-fetch nav to include the new classification
-      req.flash("messages", [{ text: "Classification added successfully.", type: "success" }]);      return res.status(201).render("inventory/management", {
-        title: "Inventory Management",
-        nav,
-      });
+      nav = await utilities.getNav();
+      req.flash("messages", [{ text: "Classification added successfully.", type: "success" }]);      
+      return res.status(201).redirect("/inv/");
     } else {
-      req.flash("messages", [{ text: "Sorry, the classification could not be added.", type: "error" }]);      return res.status(500).render("inventory/add-classification", {
+      req.flash("messages", [{ text: "Sorry, the classification could not be added.", type: "error" }]);      
+      return res.status(500).render("inventory/add-classification", {
         title: "Add Classification",
         nav,
         classification_name,
@@ -117,7 +116,8 @@ invCont.addClassification = async function (req, res, next) {
     }
   } catch (error) {
     console.error("Error in addClassification:", error);
-    req.flash("messages", [{ text: "Sorry, the classification could not be added.", type: "error" }]);    return res.status(500).render("inventory/add-classification", {
+    req.flash("messages", [{ text: "Sorry, the classification could not be added.", type: "error" }]);    
+    return res.status(500).render("inventory/add-classification", {
       title: "Add Classification",
       nav,
       classification_name,
@@ -198,14 +198,12 @@ invCont.addInventory = async function (req, res, next) {
       inv_color
     );
     if (result) {
-      nav = await utilities.getNav(); // Re-fetch nav to include any new classifications
+      nav = await utilities.getNav();
       req.flash("messages", [{ text: "Inventory item added successfully.", type: "success" }]);
-      return res.status(201).render("inventory/management", {
-        title: "Inventory Management",
-        nav,
-      });
+      return res.status(201).redirect("/inv/");
     } else {
-      req.flash("messages", [{ text: "Sorry, the inventory item could not be added.", type: "error" }]);      return res.status(500).render("inventory/add-inventory", {
+      req.flash("messages", [{ text: "Sorry, the inventory item could not be added.", type: "error" }]);      
+      return res.status(500).render("inventory/add-inventory", {
         title: "Add New Inventory",
         nav,
         classificationList,
@@ -222,7 +220,8 @@ invCont.addInventory = async function (req, res, next) {
     }
   } catch (error) {
     console.error("Error in addInventory:", error);
-    req.flash("messages", [{ text: "An error occurred while adding the inventory item: " + error.message, type: "error" }]);    return res.status(500).render("inventory/add-inventory", {
+    req.flash("messages", [{ text: "An error occurred while adding the inventory item: " + error.message, type: "error" }]);    
+    return res.status(500).render("inventory/add-inventory", {
       title: "Add New Inventory",
       nav,
       classificationList,
@@ -317,11 +316,13 @@ invCont.updateInventory = async function (req, res, next) {
 
   if (updateResult) {
     const itemName = updateResult.inv_make + " " + updateResult.inv_model;
-    req.flash("messages", [{ text: `The ${itemName} was successfully updated.`, type: "success" }]);    res.redirect("/inv/");
+    req.flash("messages", [{ text: `The ${itemName} was successfully updated.`, type: "success" }]);    
+    res.redirect("/inv/");
   } else {
     const classificationList = await utilities.buildClassificationList(classification_id);
     const itemName = `${inv_make} ${inv_model}`;
-    req.flash("messages", [{ text: "Sorry, the update failed.", type: "error" }]);    res.status(501).render("inventory/edit-inventory", {
+    req.flash("messages", [{ text: "Sorry, the update failed.", type: "error" }]);    
+    res.status(501).render("inventory/edit-inventory", {
       title: "Edit " + itemName,
       nav,
       classificationList,
@@ -340,5 +341,51 @@ invCont.updateInventory = async function (req, res, next) {
     });
   }
 };
+
+
+/* ***************************
+ *  Build delete inventory confirmation view
+ * ************************** */
+invCont.buildDeleteInventoryView = async function (req, res, next) {
+  const inv_id = parseInt(req.params.inv_id);
+  let nav = await utilities.getNav();
+  const itemData = await invModel.getVehicleById(inv_id);
+  const itemName = `${itemData.inv_make} ${itemData.inv_model}`;
+  res.render("inventory/delete-confirm", {
+    title: "Delete " + itemName,
+    nav,
+    errors: null,
+    inv_id: itemData.inv_id,
+    inv_make: itemData.inv_make,
+    inv_model: itemData.inv_model,
+    inv_year: itemData.inv_year,
+    inv_description: itemData.inv_description,
+    inv_image: itemData.inv_image,
+    inv_thumbnail: itemData.inv_thumbnail,
+    inv_price: itemData.inv_price,
+    inv_miles: itemData.inv_miles,
+    inv_color: itemData.inv_color,
+    classification_id: itemData.classification_id,
+  });
+};
+
+/* ***************************
+ *  Delete Inventory Data
+ * ************************** */
+invCont.deleteInventory = async function (req, res, next) {
+  let nav = await utilities.getNav();
+  const inv_id = parseInt(req.body.inv_id);
+  const deleteResult = await invModel.deleteInventoryItem(inv_id);
+
+  if (deleteResult) {
+    req.flash("messages", [{ text: "The inventory item was successfully deleted.", type: "success" }]);
+    res.redirect("/inv/");
+  } else {
+    const itemName = `${req.body.inv_make} ${req.body.inv_model}`;
+    req.flash("messages", [{ text: "Sorry, the deletion failed.", type: "error" }]);
+    res.status(501).redirect(`/inv/delete/${inv_id}`);
+  }
+};
+
 
 module.exports = invCont

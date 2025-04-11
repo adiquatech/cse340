@@ -1,3 +1,17 @@
+//Client-Side Validation Script for add-classification
+document.getElementById('classificationForm').addEventListener('submit', function(e) {
+    const input = document.getElementById('classification_name');
+    const value = input.value;
+    const regex = /^[A-Za-z0-9]+$/;
+
+    if (!regex.test(value)) {
+    e.preventDefault();
+    alert('Classification name can only contain letters and numbers (no spaces or special characters).');
+    }
+});
+
+//Client-Side Validation Script for update form
+
 const form = document.querySelector("#updateForm")
     form.addEventListener("change", function () {
       const updateBtn = document.querySelector("button")
@@ -5,7 +19,7 @@ const form = document.querySelector("#updateForm")
     })
 
 
-// Client-Side Validation Script
+// Client-Side Validation Script for iinventory form
 
 document.getElementById('inventoryForm').addEventListener('submit', function(e) {
     const classification = document.getElementById('classificationList').value;

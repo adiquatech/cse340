@@ -86,17 +86,12 @@ Util.handleErrors = (fn) => async (req, res, next) => {
   try {
     await fn(req, res, next);
   } catch (err) {
-    console.error(err.stack);
-    const nav = await Util.getNav(); // Fetch navigation dynamically
-    req.flash("messages", err.message || "An error occurred. Please try again.");
-    res.status(500).render(req.path.includes("registeration") ? "account/registeration" : "account/login", {
-      title: req.path.includes("registeration") ? "Register" : "Login",
+    console.error("Error at:", req.originalUrl, ":", err);
+    const nav = await Util.getNav();
+    res.status(500).render("errors/error", {
+      title: "Server Error",
+      message: err.message || "An unexpected error occurred. Please try again later.",
       nav,
-      errors: null,
-      messages: req.flash("messages"),
-      account_firstname: req.body.account_firstname || "",
-      account_lastname: req.body.account_lastname || "",
-      account_email: req.body.account_email || "",
     });
   }
 };
@@ -134,7 +129,27 @@ Util.checkLogin = async(req, res, next) => {
   if (req.cookies.jwt) {
     next();
   } else {
-    req.flash("messages", "Please log in to access this page");
+    req.flash("messages", [{ text: "Please log in to access this page.", type: "error" }]);    
+    res.redirect("/account/login");
+  }
+};
+
+
+/* ****************************************
+ * Middleware to restrict access to admin views
+ * Only allows "Employee" or "Admin" account types
+ **************************************** */
+Util.restrictAdminAccess = (req, res, next) => {
+  if (res.locals.loggedin) {
+    const accountType = res.locals.accountData.account_type;
+    if (accountType === "Employee" || accountType === "Admin") {
+      next();
+    } else {
+      req.flash("messages", [{ text: "Access denied. You must be an Employee or Admin to access this page.", type: "error" }]);
+      res.redirect("/account/login");
+    }
+  } else {
+    req.flash("messages", [{ text: "Please log in to access this page.", type: "error" }]);
     res.redirect("/account/login");
   }
 };

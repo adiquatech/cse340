@@ -123,18 +123,162 @@ accountController.accountLogin = async (req, res) => {
  * Deliver Account Management View
  * *************************************** */
 accountController.buildAccountManagement = async (req, res, next) => {
-  let nav;
-    nav = await utilities.getNav();
-
-    console.log("Rendering account/management with data:", { title: "Account Management", nav, messages: req.flash("messages") });
-    res.render("account/management", {
+  let nav = await utilities.getNav();
+  const accountData = res.locals.accountData; // From checkJWTToken middleware
+  if (!accountData) {
+    req.flash("messages", [{ text: "Please log in to access this page.", type: "error" }]);
+    return res.redirect("/account/login");
+  }
+  res.render("account/management", {
     title: "Account Management",
     nav,
-   });
-}
+    account_firstname: accountData.account_firstname,
+    account_type: accountData.account_type,
+  });
+};
 
 
+/* ****************************************
+ * Process Logout
+ * *************************************** */
+accountController.logout = async (req, res, next) => {
+  res.clearCookie("jwt");
+  req.flash("messages", [{ text: "You have been logged out.", type: "success" }]);
+  return res.redirect("/");
+};
 
 
+/* ****************************************
+ * Build Account Update
+ * *************************************** */
+accountController.buildAccountUpdateView = async (req, res, next) => {
+  let nav = await utilities.getNav();
+  const account_id = req.params.account_id;
+  const accountData = await accountModel.getAccountById(account_id);
+  if (!accountData) {
+    req.flash("messages", [{ text: "Account not found.", type: "error" }]);
+    return res.redirect("/account/");
+  }
+  res.render("account/update", {
+    title: "Update Account",
+    nav,
+    account_id: accountData.account_id,
+    account_firstname: accountData.account_firstname,
+    account_lastname: accountData.account_lastname,
+    account_email: accountData.account_email,
+    error: null,
+  });
+};
+
+
+/* ****************************************
+ * Process Password Update
+ * *************************************** */
+accountController.updatePassword = async (req, res, next) => {
+  let nav = await utilities.getNav();
+  const { account_id, account_password } = req.body;
+
+  try {
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(account_password, 10);
+    const updateResult = await accountModel.updatePassword(account_id, hashedPassword);
+
+    if (updateResult) {
+      // Update the JWT with the new account data
+      const updatedAccount = await accountModel.getAccountById(account_id);
+      delete updatedAccount.account_password;
+      const accessToken = jwt.sign(updatedAccount, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 });
+      if (process.env.NODE_ENV === 'development') {
+        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
+      } else {
+        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 });
+      }
+
+      req.flash("messages", [{ text: "Password updated successfully.", type: "success" }]);
+      return res.redirect("/account/");
+    } else {
+      req.flash("messages", [{ text: "Sorry, the password update failed.", type: "error" }]);
+      const accountData = await accountModel.getAccountById(account_id);
+      return res.status(500).render("account/update", {
+        title: "Update Account",
+        nav,
+        account_id,
+        account_firstname: accountData.account_firstname,
+        account_lastname: accountData.account_lastname,
+        account_email: accountData.account_email,
+        errors: null,
+      });
+    }
+  } catch (error) {
+    console.error("Error in updatePassword:", error);
+    req.flash("messages", [{ text: "An error occurred while updating the password: " + error.message, type: "error" }]);
+    const accountData = await accountModel.getAccountById(account_id);
+    return res.status(500).render("account/update", {
+      title: "Update Account",
+      nav,
+      account_id,
+      account_firstname: accountData.account_firstname,
+      account_lastname: accountData.account_lastname,
+      account_email: accountData.account_email,
+      errors: null,
+    });
+  }
+};
+
+
+/* ****************************************
+ * Process Account Information Update
+ * *************************************** */
+accountController.updateAccountInfo = async (req, res, next) => {
+  let nav = await utilities.getNav();
+  const { account_id, account_firstname, account_lastname, account_email } = req.body;
+
+  try {
+    const updateResult = await accountModel.updateAccountInfo(
+      account_id,
+      account_firstname,
+      account_lastname,
+      account_email
+    );
+
+    if (updateResult) {
+      // Update the JWT with the new account data
+      const updatedAccount = await accountModel.getAccountById(account_id);
+      delete updatedAccount.account_password; // Remove password from the data
+      const accessToken = jwt.sign(updatedAccount, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 });
+      if (process.env.NODE_ENV === 'development') {
+        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
+      } else {
+        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 });
+      }
+
+      req.flash("messages", [{ text: "Account information updated successfully.", type: "success" }]);
+      return res.redirect("/account/");
+    } else {
+      req.flash("messages", [{ text: "Sorry, the update failed.", type: "error" }]);
+      return res.status(500).render("account/update", {
+        title: "Update Account",
+        nav,
+        account_id,
+        account_firstname,
+        account_lastname,
+        account_email,
+        errors: null,
+      });
+    }
+  } catch (error) {
+    console.error("Error in updateAccountInfo:", error);
+    req.flash("messages", [{ text: "An error occurred while updating the account: " + error.message, type: "error" }]);
+    return res.status(500).render("account/update", {
+      title: "Update Account",
+      nav,
+      account_id,
+      account_firstname,
+      account_lastname,
+      account_email,
+      errors: null,
+    });
+  }
+};
 
 module.exports = accountController;

@@ -11,7 +11,7 @@ async function registerAccount(account_firstname, account_lastname, account_emai
     } catch (error) {
       return error.message
     }
-  }
+  };
 
 
 /* **********************
@@ -25,7 +25,7 @@ async function checkExistingEmail(account_email){
   } catch (error) {
     return error.message
   }
-}
+};
 
 
 /* *****************************
@@ -40,6 +40,56 @@ async function getAccountByEmail (account_email) {
   } catch (error) {
     return new Error("No matching email found")
   }
-}
+};
 
-module.exports = {registerAccount, checkExistingEmail, getAccountByEmail}
+
+/* *****************************
+ * Get account data by account_id
+ * ***************************** */
+async function getAccountById(account_id) {
+  try {
+    const sql = "SELECT account_id, account_firstname, account_lastname, account_email, account_type FROM account WHERE account_id = $1";
+    const result = await pool.query(sql, [account_id]);
+    return result.rows[0];
+  } catch (error) {
+    console.error("getAccountById error: " + error);
+    return null;
+  }
+};
+
+/* *****************************
+ * Update account information
+ * ***************************** */
+async function updateAccountInfo(account_id, account_firstname, account_lastname, account_email) {
+  try {
+    const sql = "UPDATE account SET account_firstname = $1, account_lastname = $2, account_email = $3 WHERE account_id = $4 RETURNING *";
+    const result = await pool.query(sql, [account_firstname, account_lastname, account_email, account_id]);
+    return result.rows[0];
+  } catch (error) {
+    console.error("updateAccountInfo error: " + error);
+    return null;
+  }
+};
+
+/* *****************************
+ * Update account password
+ * ***************************** */
+async function updatePassword(account_id, hashedPassword) {
+  try {
+    const sql = "UPDATE account SET account_password = $1 WHERE account_id = $2 RETURNING *";
+    const result = await pool.query(sql, [hashedPassword, account_id]);
+    return result.rows[0];
+  } catch (error) {
+    console.error("updatePassword error: " + error);
+    return null;
+  }
+};
+
+module.exports = {
+  registerAccount, 
+  checkExistingEmail, 
+  getAccountByEmail,
+  updateAccountInfo,
+  updatePassword,
+  getAccountById
+}
