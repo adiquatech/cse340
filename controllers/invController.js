@@ -256,16 +256,23 @@ invCont.getInventoryJSON = async (req, res, next) => {
 /* ***************************
  *  Build edit inventory view
  * ************************** */
+/* ****************************************
+ * Build Edit Inventory View
+ * *************************************** */
 invCont.buildEditInventoryView = async function (req, res, next) {
-  const inv_id = parseInt(req.params.inv_id);
+  const inv_id = req.params.inv_id;
+  console.log("Fetching inventory item for inv_id:", inv_id);
   let nav = await utilities.getNav();
   const itemData = await invModel.getVehicleById(inv_id);
+  if (!itemData) {
+    req.flash("messages", [{ text: "Inventory item not found.", type: "error" }]);
+    return res.redirect("/inv/");
+  }
   const classificationList = await utilities.buildClassificationList(itemData.classification_id);
-  const itemName = `${itemData.inv_make} ${itemData.inv_model}`;
   res.render("inventory/edit-inventory", {
-    title: "Edit " + itemName,
+    title: "Edit " + itemData.inv_make + " " + itemData.inv_model,
     nav,
-    classificationList,
+    classificationList: classificationList,
     errors: null,
     inv_id: itemData.inv_id,
     inv_make: itemData.inv_make,
@@ -280,7 +287,6 @@ invCont.buildEditInventoryView = async function (req, res, next) {
     classification_id: itemData.classification_id,
   });
 };
-
 
 /* ***************************
  *  Update Inventory Data
@@ -369,6 +375,7 @@ invCont.buildDeleteInventoryView = async function (req, res, next) {
   });
 };
 
+
 /* ***************************
  *  Delete Inventory Data
  * ************************** */
@@ -386,6 +393,137 @@ invCont.deleteInventory = async function (req, res, next) {
     res.status(501).redirect(`/inv/delete/${inv_id}`);
   }
 };
+
+
+/* ****************************************
+ * Build Delete Classification Confirmation View
+ * *************************************** */
+invCont.buildDeleteClassificationView = async function (req, res, next) {
+  let nav = await utilities.getNav();
+  const classification_id = req.params.classification_id;
+  const classificationData = await invModel.getClassificationById(classification_id);
+
+  if (!classificationData) {
+    req.flash("messages", [{ text: "Classification not found.", type: "error" }]);
+    return res.redirect("/inv/");
+  }
+
+  // Check if there are any vehicles associated with this classification
+  const vehicles = await invModel.getInventoryByClassificationId(classification_id);
+  if (vehicles.length > 0) {
+    req.flash("messages", [{ text: "Cannot delete classification because it has associated vehicles.", type: "error" }]);
+    return res.redirect("/inv/");
+  }
+
+  res.render("inventory/delete-classification", {
+    title: `Delete ${classificationData.classification_name}`,
+    nav,
+    classification_id: classificationData.classification_id,
+    classification_name: classificationData.classification_name,
+    errors: null,
+  });
+};
+
+
+/* ****************************************
+ * Process Delete Classification
+ * *************************************** */
+invCont.deleteClassification = async function (req, res, next) {
+  let nav = await utilities.getNav();
+  const { classification_id } = req.body;
+
+  // Double-check if there are any vehicles associated with this classification
+  const vehicles = await invModel.getInventoryByClassificationId(classification_id);
+  if (vehicles.length > 0) {
+    req.flash("messages", [{ text: "Cannot delete classification because it has associated vehicles.", type: "error" }]);
+    return res.redirect("/inv/");
+  }
+
+  const deleteResult = await invModel.deleteClassification(classification_id);
+  if (deleteResult) {
+    req.flash("messages", [{ text: "Classification deleted successfully.", type: "success" }]);
+    return res.redirect("/inv/");
+  } else {
+    req.flash("messages", [{ text: "Failed to delete classification.", type: "error" }]);
+    return res.render("inventory/delete-classification", {
+      title: "Delete Classification",
+      nav,
+      classification_id,
+      classification_name: req.body.classification_name,
+      errors: null,
+    });
+  }
+};
+
+
+/* ****************************************
+ * Get all classifications as JSON
+ * *************************************** */
+invCont.getClassificationsJSON = async function (req, res, next) {
+  const classifications = await invModel.getClassifications();
+  res.json(classifications.rows);
+};
+
+
+/* ****************************************
+ * Build Edit Classification View
+ * *************************************** */
+invCont.buildEditClassificationView = async function (req, res, next) {
+  let nav = await utilities.getNav();
+  const classification_id = req.params.classification_id;
+  const classificationData = await invModel.getClassificationById(classification_id);
+
+  if (!classificationData) {
+    req.flash("messages", [{ text: "Classification not found.", type: "error" }]);
+    return res.redirect("/inv/");
+  }
+
+  res.render("inventory/edit-classification", {
+    title: `Edit ${classificationData.classification_name}`,
+    nav,
+    classification_id: classificationData.classification_id,
+    classification_name: classificationData.classification_name,
+    errors: null,
+  });
+};
+
+/* ****************************************
+ * Process Update Classification
+ * *************************************** */
+invCont.updateClassification = async function (req, res, next) {
+  let nav = await utilities.getNav();
+  const { classification_id, classification_name } = req.body;
+
+  const updateResult = await invModel.updateClassification(classification_id, classification_name);
+  if (updateResult) {
+    req.flash("messages", [{ text: "Classification updated successfully.", type: "success" }]);
+    return res.redirect("/inv/");
+  } else {
+    req.flash("messages", [{ text: "Failed to update classification.", type: "error" }]);
+    return res.render("inventory/edit-classification", {
+      title: "Edit Classification",
+      nav,
+      classification_id,
+      classification_name,
+      errors: null,
+    });
+  }
+};
+
+
+/* ****************************************
+ * Get a single classification by ID as JSON
+ * *************************************** */
+invCont.getClassificationByIdJSON = async function (req, res, next) {
+  const classification_id = req.params.classification_id;
+  const classification = await invModel.getClassificationById(classification_id);
+  if (classification) {
+    res.json(classification);
+  } else {
+    res.status(404).json({ message: "Classification not found" });
+  }
+};
+
 
 
 module.exports = invCont

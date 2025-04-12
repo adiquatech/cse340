@@ -1,0 +1,21 @@
+<h1><%= title %></h1>
+<div class="deleteClassificationForm">
+  <% if (messages && messages.length > 0) { %>
+    <% messages.forEach(message => { %>
+      <div class="messages <%= message.type %>">
+        <p><%= message.text %></p>
+      </div>
+    <% }) %>
+  <% } %>
+
+  <p class="confirm-delete">Are you sure you want to delete the classification "<%= classification_name %>"? This action cannot be undone.</p>
+
+  <form id="deleteClassificationForm" action="/inv/delete-classification" method="POST">
+    <input type="hidden" name="classification_id" value="<%= classification_id %>">
+    <input type="hidden" name="classification_name" value="<%= classification_name %>">
+
+    <button type="submit">Delete Classification</button>
+    <a href="/inv/">Cancel</a>
+  </form>
+</div>
+<script src="/js/inv-update.js"></script>

@@ -1,12 +1,12 @@
-<h1>Edit Inventory Item</h1>
+<h1><%= title %></h1>
 <div class="add-inventory">
-    <% if (messages && messages.length > 0) { %>
-        <% messages.forEach(message => { %>
-          <div class="messages <%= message.type %>">
-            <p><%= message.text %></p>
-          </div>
-        <% }) %>
-      <% } %>
+<% if (messages && messages.length > 0) { %>
+    <% messages.forEach(message => { %>
+        <div class="messages <%= message.type %>">
+        <p><%= message.text %></p>
+        </div>
+    <% }) %>
+    <% } %>
 
 <!-- Form -->
 <form id="updateForm" action="/inv/update" method="post" novalidate>
@@ -149,7 +149,7 @@
     >
     </div>
     <input type="hidden" name="inv_id" <% if(locals.inv_id) { %> value="<%= locals.inv_id %>" <% } %>>
-    <button type="submit" class="btn btn-primary" disabled>Update Vehicles</button>
+    <button type="submit" id="updateVehicleBtn" class="btn btn-primary" disabled>Update Vehicles</button>
 </form>
 </div>
 

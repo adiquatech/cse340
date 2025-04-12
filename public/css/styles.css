@@ -1,5 +1,5 @@
 /* ========================================================================================== */
-/*                               HOME PAGES CSS STYLING                                      */
+/*                               GENERAL CSS STYLING                                      */
 /* ========================================================================================== */
 :root {
   --primary-color: #4c96d7;       /* Blue */
@@ -21,7 +21,10 @@ body {
   margin: 0;
   padding: 0;
   color: var(--dark-color);
-  background-color: url("/public/images/site/checkerboard.jpg");
+  background-image: url("/images/site/checkerboard.jpg");
+  background-repeat: repeat;
+  background-position: top left;
+  background-attachment: fixed;
   line-height: 1.6;
 }
 #wrapper {
@@ -309,11 +312,11 @@ footer a.error-trigger:hover {
 /*                               LOGIN PAGE STYLING                                */
 /* ========================================================================================== */
 .login-container {
-  max-width: 400px;
+  max-width: 500px;
   margin: 20px auto;
   background-color: var(--secondary-color);
   padding: 2rem;
-  border-radius: 5px;
+  border-radius: 10px;
   text-align: center;
 }
 .login-form {
@@ -458,7 +461,7 @@ input[type="password"]::placeholder {
   padding: 1rem;
   margin-bottom: 1rem;
   border-radius: 5px;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 .messages.error {
   background-color: #f8d7da;
@@ -542,6 +545,35 @@ input[type="password"]::placeholder {
 #inventoryDisplay tr:hover {
   background-color: #f5f5f5;
 }
+
+
+/*manage classification*/
+#classificationListManage{
+  font-size: 1.5rem;
+  padding: 0.5rem;
+}
+#classificationDisplay {
+  width: 100%;
+  margin-top: 1.5rem;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+#classificationDisplay th,
+#classificationDisplay td {
+  padding: 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+#classificationDisplay th {
+  background-color: var(--secondary-color);
+  color: white;
+  font-weight: bold;
+}
+#classificationDisplay tr:hover {
+  background-color: #f5f5f5;
+}
+
 
 
 /* ========================================================================================== */
@@ -848,6 +880,116 @@ input[type="password"]::placeholder {
 }
 .update-container .update-button:hover {
   background-color: var(--primary-color);
+}
+
+
+/* ========================================================================================== */
+/*                               CLASSIFICATION EDIT PAGE STYLING                                */
+/* ========================================================================================== */
+.editClassificationForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: var(--light-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+#editClassificationForm label {
+  font-size: 20px;
+  color: var(--secondary-color);
+  font-weight: bold;
+}
+#editClassificationForm input[type="text"] {
+  width: 100%;
+  max-width: 500px;
+  padding: 10px;
+  margin: 20px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+#editClassificationForm button {
+  padding: 10px 20px;
+  margin: 20px;
+  background-color: var(--secondary-color);
+  color: var(--light-color);
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+#editClassificationForm button:hover {
+  background-color: var(--primary-color);
+}
+#editClassificationForm a {
+  padding: 10px 20px;
+  margin: 20px;
+  background-color: #6c757d; 
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+#editClassificationForm a:hover {
+  background-color: #5a6268;
+}
+
+
+/* ========================================================================================== */
+/*                               CLASSIFICATION DELETE PAGE STYLING                                */
+/* ========================================================================================== */
+.deleteClassificationForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: var(--secondary-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+ .confirm-delete {
+  font-size: 20px;
+  font-weight:500;
+  color: var(--accent-color);
+  margin-bottom: 20px;
+  line-height: 1.5;
+  text-align: center;
+}
+#deleteClassificationForm button {
+  padding: 10px 20px;
+  background-color: #dc3545; 
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+#deleteClassificationForm button:hover {
+  background-color: #c82333;
+}
+#deleteClassificationForm a {
+  padding: 10px 20px;
+  background-color: #6c757d; 
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+#deleteClassificationForm a:hover {
+  background-color: #5a6268;
 }
 
 

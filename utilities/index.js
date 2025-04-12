@@ -2,6 +2,7 @@ const invModel = require("../models/inventory-model")
 const jwt = require("jsonwebtoken");
 const Util = {}
 
+
 /* ************************
  * Constructs the nav HTML unordered list
  ************************** */
@@ -16,7 +17,8 @@ Util.getNav = async function (req, res, next) {
   })
   list += "</ul>"
   return list
-}
+};
+
 
 /* **************************************
  * Build the classification view HTML
@@ -39,7 +41,8 @@ Util.buildClassificationGrid = async function(data){
     grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
   }
   return grid
-}
+};
+
 
 /* **************************************
  * Build the vehicle detail view HTML

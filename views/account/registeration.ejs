@@ -34,22 +34,9 @@
             <p class="password-requirements">
                 Password must be at least 12 characters long, contain at least 1 capital letter, 1 number, and 1 special character.
             </p>
-            <button type="button" class="toggle-password" onclick="togglePassword()">Show Password</button>
+            <button type="button" class="toggle-password">Show Password</button>
         </div>
         <button type="submit" class="register-button">Register</button>
     </form>
 </div>
 
-<script>
-    function togglePassword() {
-        const passwordField = document.getElementById("account_password");
-        const toggleButton = document.querySelector(".toggle-password");
-        if (passwordField.type === "password") {
-            passwordField.type = "text";
-            toggleButton.textContent = "Hide Password";
-        } else {
-            passwordField.type = "password";
-            toggleButton.textContent = "Show Password";
-        }
-    }
-</script>
